@@ -10,12 +10,12 @@ build:
 		--no-cache \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
-		-t laratools/ci:$(TAG) \
+		-t scriptor2k2/ci:$(TAG) \
 		-f Dockerfile-$(TAG) .
 
 test:
 	echo "Testing Tag: $(TAG)"
-	dgoss run -it laratools/ci:$(TAG)
+	dgoss run -it scriptor2k2/ci:$(TAG)
 
 build-all:
 	make build TAG="7.0"
@@ -30,15 +30,15 @@ test-all:
 	make test TAG="7.3"
 
 push-all:
-	docker push laratools/ci:7.0
-	docker push laratools/ci:7.1
-	docker push laratools/ci:7.2
-	docker push laratools/ci:7.3
+# 	docker push scriptor2k2/ci:7.0
+# 	docker push scriptor2k2/ci:7.1
+# 	docker push scriptor2k2/ci:7.2
+	docker push scriptor2k2/ci:7.3
 	# Tag 7.3 as latest and 7
-	docker tag laratools/ci:7.3 laratools/ci:7
-	docker tag laratools/ci:7.3 laratools/ci:latest
-	docker push laratools/ci:7
-	docker push laratools/ci:latest
+	docker tag scriptor2k2/ci:7.3 scriptor2k2/ci:7
+	docker tag scriptor2k2/ci:7.3 scriptor2k2/ci:latest
+# 	docker push scriptor2k2/ci:7
+	docker push scriptor2k2/ci:latest
 
 clean:
 	docker ps -a -q | xargs docker rm -f

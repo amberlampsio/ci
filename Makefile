@@ -22,22 +22,26 @@ build-all:
 	make build TAG="7.1"
 	make build TAG="7.2"
 	make build TAG="7.3"
+	make build TAG="7.4"
 
 test-all:
 	make test TAG="7.0"
 	make test TAG="7.1"
 	make test TAG="7.2"
 	make test TAG="7.3"
+	make test TAG="7.4"
 
 push-all:
-# 	docker push scriptor2k2/ci:7.0
-# 	docker push scriptor2k2/ci:7.1
-# 	docker push scriptor2k2/ci:7.2
+	docker push scriptor2k2/ci:7.0
+	docker push scriptor2k2/ci:7.1
+	docker push scriptor2k2/ci:7.2
 	docker push scriptor2k2/ci:7.3
-	# Tag 7.3 as latest and 7
-	docker tag scriptor2k2/ci:7.3 scriptor2k2/ci:7
-	docker tag scriptor2k2/ci:7.3 scriptor2k2/ci:latest
-# 	docker push scriptor2k2/ci:7
+	docker push scriptor2k2/ci:7.4
+
+	# Tag 7.4 as latest and 7
+	docker tag scriptor2k2/ci:7.4 scriptor2k2/ci:7
+	docker tag scriptor2k2/ci:7.4 scriptor2k2/ci:latest
+	docker push scriptor2k2/ci:7
 	docker push scriptor2k2/ci:latest
 
 clean:

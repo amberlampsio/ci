@@ -28,29 +28,17 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 
 RUN apt-get update && apt-get install -y \
         libbz2-dev \
-        libsodium-dev \
+        libmcrypt-dev \
         git \
         unzip \
         wget \
-        libgd-dev \
         libpng-dev \
-        libjpeg-dev \
-        zlib1g-dev \
         libgconf-2-4 \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
         libfontconfig1 \
-        libxml2-dev \
-        autoconf \
-        libmemcached-dev \
-        default-mysql-client \
         chromium \
         xvfb \
-        yarn \
         libmagickwand-dev \
-        libzip-dev
-
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+        yarn
 
 RUN docker-php-ext-install -j$(nproc) \
         bcmath \
@@ -58,7 +46,7 @@ RUN docker-php-ext-install -j$(nproc) \
         calendar \
         exif \
         gd \
-        sodium \
+        mcrypt \
         pcntl \
         pdo_mysql \
         shmop \
@@ -68,7 +56,11 @@ RUN docker-php-ext-install -j$(nproc) \
         sysvshm \
         zip
 
-RUN pecl install imagick && docker-php-ext-enable imagick
+RUN pecl install redis
+RUN docker-php-ext-enable redis
+
+RUN pecl install imagick
+RUN docker-php-ext-enable imagick
 
 RUN mkdir -p $NVM_DIR && \
     curl -o- https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh | bash

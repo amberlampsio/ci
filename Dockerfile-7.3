@@ -63,6 +63,9 @@ RUN docker-php-ext-enable redis
 RUN pecl install imagick
 RUN docker-php-ext-enable imagick
 
+RUN pecl install pcov
+RUN docker-php-ext-enable pcov
+
 RUN mkdir -p $NVM_DIR && \
     curl -o- https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh | bash
 

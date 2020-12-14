@@ -5,7 +5,6 @@ ARG VCS_REF
 
 ENV COMPOSER_NO_INTERACTION=1
 ENV COMPOSER_ALLOW_SUPERUSER=1
-ENV NVM_DIR=/root/.nvm
 
 LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-url="https://github.com/scriptor2k2/ci.git" \
@@ -16,15 +15,12 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.description="Docker for Laravel in a CI environment" \
       org.label-schema.url="https://github.com/scriptor2k2/ci"
 
-ENV NVM_VERSION v0.33.9
-
 RUN apt-get update
 
-# Required to add yarn package repository
-RUN apt-get install -y apt-transport-https gnupg
+RUN apt-get -y install libreoffice --no-install-recommends --no-install-suggests
 
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get install -y apt-utils
+RUN apt-get install -y apt-transport-https gnupg
 
 RUN apt-get update && apt-get install -y \
         libbz2-dev \
@@ -57,18 +53,22 @@ RUN docker-php-ext-install -j$(nproc) \
         sysvshm \
         zip
 
+RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev
+
+RUN docker-php-ext-configure gd \
+	--with-jpeg=/usr/include/ \
+	--with-freetype=/usr/include/
+
+RUN docker-php-ext-install -j$(nproc) gd
+
 RUN pecl install redis
 RUN docker-php-ext-enable redis
 
 RUN pecl install imagick
 RUN docker-php-ext-enable imagick
 
-RUN mkdir -p $NVM_DIR && \
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh | bash
-
-RUN . ~/.nvm/nvm.sh && \
-        nvm install 10 && \
-        nvm alias default node
+RUN pecl install pcov
+RUN docker-php-ext-enable pcov
 
 COPY ./scripts ./scripts
 

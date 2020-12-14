@@ -16,4 +16,7 @@ RESULT=$?
 rm composer-setup.php
 mv composer.phar /usr/bin/composer
 chmod +x /usr/bin/composer
+
+/usr/bin/composer global require hirak/prestissimo
+
 exit $RESULT
